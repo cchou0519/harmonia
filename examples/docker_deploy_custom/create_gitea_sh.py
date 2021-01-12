@@ -1,5 +1,7 @@
 # ====== zone of config =====
-edgeNum = 9
+ff = open('number of edges', 'r')
+edgeNum = int(ff.readline())
+ff.close()
 # ====== zone of config =====
 
 if edgeNum < 1:

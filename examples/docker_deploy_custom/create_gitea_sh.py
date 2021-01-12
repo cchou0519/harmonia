@@ -47,7 +47,7 @@ text += '# global-model\n\ncurl -X PUT -H "accept: application/json" -H "Content
         'http://gitea:password@127.0.0.1:3000/api/v1/repos/gitea/global-model/collaborators/logserver\n\n'
 for i in range(1, edgeNum+1):
     text += 'curl -X PUT -H "accept: application/json" -H "Content-Type: application/json" -d \'{"permission": "read"}\' ' \
-            'http://gitea:password@127.0.0.1:3000/api/v1/repos/gitea/global-model/collaborators/edge1' + str(i) + '\n\n'
+            'http://gitea:password@127.0.0.1:3000/api/v1/repos/gitea/global-model/collaborators/edge' + str(i) + '\n\n'
 
 # print(text)
 # local-models

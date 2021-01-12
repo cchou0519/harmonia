@@ -1,5 +1,3 @@
-# import os
-
 # ====== zone of config =====
 edgeNum = 9
 # ====== zone of config =====

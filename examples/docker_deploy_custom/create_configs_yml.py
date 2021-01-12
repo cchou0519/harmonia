@@ -34,11 +34,11 @@ for i in range(1, edgeNum+1):
            'appGrpcServerURI: app:7878\n' \
            'gitUserToken: 1qaz_WSX\n' \
            'aggregatorModelRepo:\n' \
-           '  gitHttpURL: http://edge1@gitea:3000/gitea/global-model.git\n' \
+           '  gitHttpURL: http://edge' + str(i) + '@gitea:3000/gitea/global-model.git\n' \
            'edgeModelRepo:\n  ' \
-           'gitHttpURL: http://edge1@gitea:3000/gitea/local-model' + str(i) + '.git\n' \
+           'gitHttpURL: http://edge' + str(i) + '@gitea:3000/gitea/local-model' + str(i) + '.git\n' \
            'trainPlanRepo:\n' \
-           '  gitHttpURL: http://edge1@gitea:3000/gitea/train-plan.git'
+           '  gitHttpURL: http://edge' + str(i) + '@gitea:3000/gitea/train-plan.git'
     f = open('edge' + str(i) + '/config.yml', 'w')
     f.write(text)
     f.close()
@@ -49,7 +49,7 @@ for i in range(1, edgeNum+1):
            '        source: shared\n        target: /repos\n  operator:\n' \
            '    image: harmonia/operator\n    volumes:\n      - ./config.yml:/app/config.yml\n' \
            '      - type: volume\n        source: shared\n        target: /repos\n' \
-           '    networks:\n      mnist:\n        aliases:\n          - edge1\n      default:\n' \
+           '    networks:\n      mnist:\n        aliases:\n          - edge' + str(i) + '\n      default:\n' \
            'networks:\n  mnist:\n    external:\n      name: mnist\nvolumes:\n  shared:'
     f = open('edge' + str(i) + '/docker-compose.yml', 'w')
     f.write(text)

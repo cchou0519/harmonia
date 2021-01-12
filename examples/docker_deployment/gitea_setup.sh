@@ -1,31 +1,31 @@
 # Create admin
 
-gitea admin create-user --admin \
+gitea admin user create --admin \
     --username gitea \
     --password password \
     --email admin@admin.com
 
 # Create users
 
-gitea admin create-user \
+gitea admin user create \
     --username aggregator \
     --password 1qaz_WSX \
     --email aggregator@aggregator.com \
     --must-change-password=false
 
-gitea admin create-user \
+gitea admin user create \
     --username edge1 \
     --password 1qaz_WSX \
     --email edge1@edge1.com \
     --must-change-password=false
 
-gitea admin create-user \
+gitea admin user create \
     --username edge2 \
     --password 1qaz_WSX \
     --email edge2@edge2.com \
     --must-change-password=false
 
-gitea admin create-user \
+gitea admin user create \
     --username logserver \
     --password 1qaz_WSX \
     --email logserver@logserver.com \

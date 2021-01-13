@@ -39,7 +39,7 @@ def train(baseModel, output_model_path, epochs=1):
         stub = service_pb2_grpc.EdgeOperatorStub(channel)
         result = service_pb2.LocalTrainResult(
             error=0,
-            datasetSize=2500,
+            datasetSize=2500, # 這要改
             metrics=metrics
         )
 

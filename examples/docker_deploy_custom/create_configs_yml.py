@@ -46,7 +46,8 @@ for i in range(1, edgeNum+1):
     # create edge docker-compose.yml
     text = 'version: "3.7"\nservices:\n  app:\n    image: mnist_edge\n    environment:\n' \
            '      OPERATOR_URI: operator:8787\n    volumes:\n      - type: volume\n' \
-           '        source: shared\n        target: /repos\n  operator:\n' \
+           '        source: shared\n        target: /repos\n      - type: bind\n'
+           '        source: ../../mnist_data/' + str(edgeNum) + 'Parties/party' + str(i) + '\n        target: /mnist_data\n  operator:\n' \
            '    image: harmonia/operator\n    volumes:\n      - ./config.yml:/app/config.yml\n' \
            '      - type: volume\n        source: shared\n        target: /repos\n' \
            '    networks:\n      mnist:\n        aliases:\n          - edge' + str(i) + '\n      default:\n' \

@@ -1,11 +1,10 @@
 from __future__ import print_function
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.optim.lr_scheduler import StepLR
 import logging
+from torch.autograd import Variable
+import numpy as np
 
 from net import Net
 
@@ -14,9 +13,11 @@ def __train(model, device, train_loader, optimizer, epoch, log_interval):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
+        data = Variable(data.view((-1, 1, 28, 28)))
+        target = Variable(target)
         optimizer.zero_grad()
         output = model(data)
-        loss = F.nll_loss(output, target)
+        loss = F.cross_entropy(output, target)
         loss.backward()
         optimizer.step()
         if batch_idx % log_interval == 0:
@@ -32,8 +33,10 @@ def __test(model, device, test_loader):
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
+            data = Variable(data.view((-1, 1, 28, 28)))
+            target = Variable(target)
             output = model(data)
-            test_loss += F.nll_loss(
+            test_loss += F.cross_entropy(
                 output, target, reduction='sum').item()  # sum up batch loss
             pred = output.argmax(
                 dim=1,
@@ -54,12 +57,11 @@ def __test(model, device, test_loader):
     return metrics
 
 
-def train(data_slice: list, output: str, batch_size=64, test_batch_size=1000,
+def train(output: str, batch_size=128, test_batch_size=128,
           epochs=1, lr=1.0, gamma=0.7, no_cuda=False, seed=1,
           log_interval=10, resume=''):
     """
     PyTorch MNIST Example
-    data_slice: index of MNIST dat for training, should be in range [0:60000)
     output: output checkpoint filename
     batch_size: input batch size for training (default: 64)
     test_batch_size: input batch size for testing (default: 1000)
@@ -79,32 +81,32 @@ def train(data_slice: list, output: str, batch_size=64, test_batch_size=1000,
 
     logging.info("[MNIST] Training data loading...")
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
-    training_data = datasets.MNIST('../data',
-                                   train=True,
-                                   download=True,
-                                   transform=transforms.Compose([
-                                       transforms.ToTensor(),
-                                       transforms.Normalize((0.1307, ),
-                                                            (0.3081, ))
-                                   ]))
-    train_loader = torch.utils.data.DataLoader(torch.utils.data.Subset(
-        training_data, list(range(2500))),
+
+    aa = np.load("/mnist_data/data.npz")
+
+    X_train = aa["x_train"].astype('float32')
+    X_test = aa["x_test"].astype('float32')
+
+    featuresTrain = torch.from_numpy(X_train)
+    targetsTrain = torch.from_numpy(aa["y_train"]).type(torch.LongTensor)  # data type is long
+
+    featuresTest = torch.from_numpy(X_test)
+    targetsTest = torch.from_numpy(aa["y_test"]).type(torch.LongTensor)  # data type is long
+
+    training_data = torch.utils.data.TensorDataset(featuresTrain, targetsTrain)
+
+    testing_data = torch.utils.data.TensorDataset(featuresTest, targetsTest)
+
+    train_loader = torch.utils.data.DataLoader(training_data,
                                                batch_size=batch_size,
                                                shuffle=True,
                                                **kwargs)
-    test_loader = torch.utils.data.DataLoader(datasets.MNIST(
-        '../data',
-        train=False,
-        transform=transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.1307, ), (0.3081, ))
-        ])),
+    test_loader = torch.utils.data.DataLoader(testing_data,
                                               batch_size=test_batch_size,
                                               shuffle=True,
                                               **kwargs)
-
     model = Net().to(device)
-    optimizer = optim.Adadelta(model.parameters(), lr=lr)
+    optimizer = optim.Adam(model.parameters())
 
     try:
         model.load_state_dict(torch.load(resume))
@@ -112,23 +114,20 @@ def train(data_slice: list, output: str, batch_size=64, test_batch_size=1000,
             optimizer.load_state_dict(resume['optimizer_state_dict'])
         if 'epoch' in resume:
             epoch = resume['epoch']
-        train_loader = torch.utils.data.DataLoader(torch.utils.data.Subset(
-            training_data, data_slice),
-            batch_size=batch_size,
-            shuffle=True,
-            **kwargs)
+        train_loader = torch.utils.data.DataLoader(training_data,
+                                                   batch_size=batch_size,
+                                                   shuffle=True,
+                                                   **kwargs)
     except Exception as err:
         logging.info("Load resume fails [%s]", err)
 
     logging.info("[MNIST] Training...")
     model.train()
 
-    scheduler = StepLR(optimizer, step_size=1, gamma=gamma)
     metrics = {}
     for epoch in range(1, epochs + 1):
         __train(model, device, train_loader, optimizer, epoch, log_interval)
         metrics = __test(model, device, test_loader)
-        scheduler.step()
 
     logging.info("[MNIST] Save Weights... [{}]".format(output))
     torch.save(model.state_dict(), output)

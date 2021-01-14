@@ -2,7 +2,6 @@ from concurrent import futures
 import logging
 import threading
 import os
-import random
 import grpc
 import service_pb2
 import service_pb2_grpc
@@ -13,14 +12,8 @@ APPLICATION_URI = "0.0.0.0:7878"
 __DATA = []
 STOP_EVENT = threading.Event()
 
-def get_training_data():
-    global __DATA
-    if not __DATA:
-        __DATA = random.sample(range(60000), 2000)
-    return __DATA
 
 def train(baseModel, output_model_path, epochs=1):
-    data = get_training_data()
     output = os.path.join("/repos", output_model_path, 'weights.tar')
     logging.info(f'input path: [{baseModel.path}]')
     logging.info(f'output path: [{output}]')
@@ -28,7 +21,7 @@ def train(baseModel, output_model_path, epochs=1):
 
     base_weight_path = os.path.join("/repos", baseModel.path, "weights.tar")
     try:
-        metrics = mnist.train(data, output, epochs=epochs, resume=base_weight_path)
+        metrics = mnist.train(output, epochs=epochs, resume=base_weight_path)
     except Exception as err:
         print(err)
 
@@ -96,6 +89,7 @@ def serve():
     STOP_EVENT.wait()
     logging.info("Server Stop")
     server.stop(None)
+
 
 if __name__ == "__main__":
     serve()

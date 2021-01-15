@@ -199,6 +199,6 @@ text += '# Logserver\n' \
         '    targetPort: 6006\n' \
         '  type: NodePort'
 
-f = open('mnist_deployment.yml', 'w')
+f = open('mnist-deployment.yml', 'w')
 f.write(text)
 f.close()

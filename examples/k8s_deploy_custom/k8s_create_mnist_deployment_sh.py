@@ -28,8 +28,8 @@ text = '# Aggregator\n' \
        '    spec:\n' \
        '      containers:\n' \
        '      - name: operator\n' \
-       '        image: harmonia/operator\n' \
-       '        imagePullPolicy: Never \n' \
+       '        image: cchou0519/harmonia-operator\n' \
+       '        imagePullPolicy: Always \n' \
        '        ports:\n' \
        '        - containerPort: 9080\n' \
        '          name: steward\n' \
@@ -40,8 +40,8 @@ text = '# Aggregator\n' \
        '        - name: shared-repos\n' \
        '          mountPath: /repos\n' \
        '      - name: application\n' \
-       '        image: harmonia/fedavg\n' \
-       '        imagePullPolicy: Never \n' \
+       '        image: cchou0519/harmonia-fedavg\n' \
+       '        imagePullPolicy: Always \n' \
        '        volumeMounts:\n' \
        '        - name: shared-repos\n' \
        '          mountPath: /repos\n' \
@@ -89,8 +89,8 @@ for i in range(1, edgeNum+1):
             '    spec:\n' \
             '      containers:\n' \
             '      - name: operator\n' \
-            '        image: harmonia/operator\n' \
-            '        imagePullPolicy: Never \n' \
+            '        image: cchou0519/harmonia-operator\n' \
+            '        imagePullPolicy: Always \n' \
             '        ports:\n' \
             '        - containerPort: 9080\n' \
             '          name: steward\n' \
@@ -101,8 +101,8 @@ for i in range(1, edgeNum+1):
             '        - name: shared-repos\n' \
             '          mountPath: /repos\n' \
             '      - name: application\n' \
-            '        image: mnist_edge\n' \
-            '        imagePullPolicy: Never \n' \
+            '        image: cchou0519/mnist_edge\n' \
+            '        imagePullPolicy: Always \n' \
             '        volumeMounts:\n' \
             '        - name: shared-repos\n' \
             '          mountPath: /repos\n' \
@@ -155,8 +155,8 @@ text += '# Logserver\n' \
         '    spec:\n' \
         '      containers:\n' \
         '      - name: operator\n' \
-        '        image: harmonia/logserver\n' \
-        '        imagePullPolicy: Never \n' \
+        '        image: cchou0519/harmonia-logserver\n' \
+        '        imagePullPolicy: Always \n' \
         '        ports:\n' \
         '        - containerPort: 9080\n' \
         '          name: logserver\n' \

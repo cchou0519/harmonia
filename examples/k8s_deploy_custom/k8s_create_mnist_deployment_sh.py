@@ -29,6 +29,7 @@ text = '# Aggregator\n' \
        '      containers:\n' \
        '      - name: operator\n' \
        '        image: harmonia/operator\n' \
+       '        imagePullPolicy: Never \n' \
        '        ports:\n' \
        '        - containerPort: 9080\n' \
        '          name: steward\n' \
@@ -40,6 +41,7 @@ text = '# Aggregator\n' \
        '          mountPath: /repos\n' \
        '      - name: application\n' \
        '        image: harmonia/fedavg\n' \
+       '        imagePullPolicy: Never \n' \
        '        volumeMounts:\n' \
        '        - name: shared-repos\n' \
        '          mountPath: /repos\n' \
@@ -88,6 +90,7 @@ for i in range(1, edgeNum+1):
             '      containers:\n' \
             '      - name: operator\n' \
             '        image: harmonia/operator\n' \
+            '        imagePullPolicy: Never \n' \
             '        ports:\n' \
             '        - containerPort: 9080\n' \
             '          name: steward\n' \
@@ -99,13 +102,14 @@ for i in range(1, edgeNum+1):
             '          mountPath: /repos\n' \
             '      - name: application\n' \
             '        image: mnist_edge\n' \
+            '        imagePullPolicy: Never \n' \
             '        volumeMounts:\n' \
             '        - name: shared-repos\n' \
             '          mountPath: /repos\n' \
-            '        - name: mnist_data\n' \
+            '        - name: mnist-data\n' \
             '          mountPath: /mnist_data\n' \
             '      volumes:\n' \
-            '      - name: mnist_data\n' \
+            '      - name: mnist-data\n' \
             '        hostPath:\n' \
             '          path: /mnist_data/' + str(edgeNum) + 'Parties/party' + str(i) + '\n' \
             '          type: Directory\n' \
@@ -152,6 +156,7 @@ text += '# Logserver\n' \
         '      containers:\n' \
         '      - name: operator\n' \
         '        image: harmonia/logserver\n' \
+        '        imagePullPolicy: Never \n' \
         '        ports:\n' \
         '        - containerPort: 9080\n' \
         '          name: logserver\n' \

@@ -8,6 +8,8 @@ edgeNum = int(temp)
 if edgeNum < 1:
     edgeNum = 1
 
+local_ip = '192.168.211.57'
+
 # create aggregator config
 text = 'apiVersion: v1\n' \
        'kind: ConfigMap\n' \
@@ -20,13 +22,13 @@ text = 'apiVersion: v1\n' \
        '      type: push\n' \
        '    gitUserToken: 1qaz_WSX\n' \
        '    aggregatorModelRepo:\n' \
-       '      gitHttpURL: http://aggregator@harmonia-gitea:3000/gitea/global-model.git\n' \
+       '      gitHttpURL: http://aggregator@'+local_ip+':3000/gitea/global-model.git\n' \
        '    edgeModelRepos:\n'
 
 for i in range(1, edgeNum+1):
-    text += '      - gitHttpURL: http://aggregator@harmonia-gitea:3000/gitea/local-model' + str(i) + '.git\n'
+    text += '      - gitHttpURL: http://aggregator@'+local_ip+':3000/gitea/local-model' + str(i) + '.git\n'
 text += '    trainPlanRepo:\n' \
-        '      gitHttpURL: http://aggregator@harmonia-gitea:3000/gitea/train-plan.git\n\n---\n\n'
+        '      gitHttpURL: http://aggregator@'+local_ip+':3000/gitea/train-plan.git\n\n---\n\n'
 
 # create logserver config
 text += 'apiVersion: v1\n' \
@@ -39,10 +41,10 @@ text += 'apiVersion: v1\n' \
         '    gitUserToken: 1qaz_WSX\n' \
         '    tensorboardDataRootDir: /tensorboard_data\n' \
         '    modelRepos:\n' \
-        '      - gitHttpURL: http://logserver@harmonia-gitea:3000/gitea/global-model.git\n'
+        '      - gitHttpURL: http://logserver@'+local_ip+':3000/gitea/global-model.git\n'
 
 for i in range(1, edgeNum+1):
-    text += '      - gitHttpURL: http://logserver@harmonia-gitea:3000/gitea/local-model' + str(i) + '.git\n'
+    text += '      - gitHttpURL: http://logserver@'+local_ip+':3000/gitea/local-model' + str(i) + '.git\n'
 
 for i in range(1, edgeNum+1):
     text += '\n---\n\n' \
@@ -57,11 +59,11 @@ for i in range(1, edgeNum+1):
             '      type: push\n' \
             '    gitUserToken: 1qaz_WSX\n' \
             '    aggregatorModelRepo:\n' \
-            '      gitHttpURL: http://edge' + str(i) + '@harmonia-gitea:3000/gitea/global-model.git\n' \
+            '      gitHttpURL: http://edge' + str(i) + '@'+local_ip+':3000/gitea/global-model.git\n' \
             '    edgeModelRepo:\n' \
-            '      gitHttpURL: http://edge' + str(i) + '@harmonia-gitea:3000/gitea/local-model' + str(i) + '.git\n' \
+            '      gitHttpURL: http://edge' + str(i) + '@'+local_ip+':3000/gitea/local-model' + str(i) + '.git\n' \
             '    trainPlanRepo:\n' \
-            '      gitHttpURL: http://edge' + str(i) + '@harmonia-gitea:3000/gitea/train-plan.git\n'
+            '      gitHttpURL: http://edge' + str(i) + '@'+local_ip+':3000/gitea/train-plan.git\n'
 
 f = open('configs.yml', 'w')
 f.write(text)

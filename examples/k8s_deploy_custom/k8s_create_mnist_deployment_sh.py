@@ -50,7 +50,7 @@ text = '# Aggregator\n' \
        '      - name: shared-repos\n' \
        '        emptyDir: {}\n\n' \
        '      nodeSelector:\n' \
-       '        role: master\n' \
+       '        role: aggregator\n' \
        '---\n\n' \
        'kind: Service\n' \
        'apiVersion: v1\n' \

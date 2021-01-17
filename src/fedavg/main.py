@@ -6,6 +6,7 @@ import grpc
 import merge
 import service_pb2
 import service_pb2_grpc
+import mnist_test
 
 OPERATOR_URI = os.getenv('OPERATOR_URI', '127.0.0.1:8787')
 APPLICATION_URI = os.getenv('APPLICATION_URI', '0.0.0.0:7878')
@@ -20,12 +21,16 @@ AGGREGATE_FAIL = 2
 
 logging.basicConfig(level=LOG_LEVEL)
 
-def send_result(err):
+
+def send_result(err, metrics={}):
     logging.info("config.GRPC_CLIENT_URI: [%s]", OPERATOR_URI)
     try:
         channel = grpc.insecure_channel(OPERATOR_URI)
         stub = service_pb2_grpc.AggregateServerOperatorStub(channel)
-        res = service_pb2.AggregateResult(error=err,)
+        res = service_pb2.AggregateResult(
+            error=err,
+            metrics=metrics
+        )
         response = stub.AggregateFinish(res)
     except grpc.RpcError as rpc_error:
         logging.error("grpc error: [%s]", rpc_error)
@@ -33,6 +38,7 @@ def send_result(err):
         logging.error("got error: [%s]", err)
 
     logging.debug("sending grpc message succeeds, response: [%s]", response)
+
 
 def aggregate(local_models, aggregated_model):
     if len(local_models) == 0:
@@ -49,8 +55,14 @@ def aggregate(local_models, aggregated_model):
     logging.debug("models: [%s]", models)
     logging.debug("output_path: [%s]", output_path)
     merge.merge(models, output_path)
+    metrics = {}
+    try:
+        metrics = mnist_test.test(resume=output_path)
+    except Exception as err:
+        print(err)
 
-    send_result(AGGREGATE_SUCCESS)
+    send_result(AGGREGATE_SUCCESS, metrics)
+
 
 class AggregateServerServicer(service_pb2_grpc.AggregateServerAppServicer):
     def Aggregate(self, request, context):

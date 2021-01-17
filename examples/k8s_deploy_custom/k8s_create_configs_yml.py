@@ -8,7 +8,7 @@ edgeNum = int(temp)
 if edgeNum < 1:
     edgeNum = 1
 
-local_ip = '192.168.211.57'
+local_ip = 'harmonia-gitea'
 
 # create aggregator config
 text = 'apiVersion: v1\n' \

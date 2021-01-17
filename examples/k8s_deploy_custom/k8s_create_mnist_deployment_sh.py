@@ -45,14 +45,20 @@ text = '# Aggregator\n' \
        '        volumeMounts:\n' \
        '        - name: shared-repos\n' \
        '          mountPath: /repos\n' \
+       '        - name: mnist-data\n' \
+       '          mountPath: /mnist_data\n' \
        '      volumes:\n' \
+       '      - name: mnist-data\n' \
+       '        hostPath:\n' \
+       '          path: /mnist_data/2Parties\n' \
+       '          type: Directory\n' \
        '      - name: config\n' \
        '        configMap:\n' \
        '          name: aggregator-config\n' \
        '      - name: shared-repos\n' \
-       '        emptyDir: {}\n\n' \
+       '        emptyDir: {}\n' \
        '      nodeSelector:\n' \
-       '        role: aggregator\n' \
+       '        role: aggregator\n\n' \
        '---\n\n' \
        'kind: Service\n' \
        'apiVersion: v1\n' \

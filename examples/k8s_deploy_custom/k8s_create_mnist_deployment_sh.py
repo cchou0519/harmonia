@@ -183,7 +183,7 @@ text += '# Logserver\n' \
         '      - name: shared-tensorboard-data\n' \
         '        emptyDir: {}\n' \
         '      nodeSelector:\n' \
-        '        role: aggregator\n\n'
+        '        role: aggregator\n\n' \
         '---\n\n' \
         'kind: Service\n' \
         'apiVersion: v1\n' \

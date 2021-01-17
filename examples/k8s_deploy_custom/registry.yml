@@ -34,6 +34,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: gitea-config
+      nodeSelector:
+        role: aggregator
 
 ---
 kind: Service

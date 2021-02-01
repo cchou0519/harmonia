@@ -6,6 +6,8 @@ RUN pip install --upgrade pip && \
 
 ADD . /app
 
-RUN python /app/setup.py install
+WORKDIR /app
+
+RUN python setup.py install
 
 ENTRYPOINT [ "python", "/app/main.py" ]

@@ -108,7 +108,7 @@ def train(output: str, batch_size=128, test_batch_size=128,
                                               **kwargs)
     model = Net().to(device)
     # optimizer = optim.Adam(model.parameters())
-    optimizer = optim.DPAdam(model.parameters(), noise_scale=0.05)
+    optimizer = optim.DPAdam(model.parameters(), noise_scale=0.05, norm_bound=1.5)
 
     try:
         model.load_state_dict(torch.load(resume))

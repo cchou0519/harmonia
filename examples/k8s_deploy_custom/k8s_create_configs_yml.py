@@ -1,10 +1,10 @@
-# ====== zone of config =====
-ff = open('number of edges', 'r')
-temp = ff.readline()
-ff.close()
-edgeNum = int(temp)
-# ====== zone of config =====
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--edgeNum", help="number of edge", type=int, dest="edgeNum")
+cmd_args = parser.parse_args()
+
+edgeNum = cmd_args.edgeNum
 if edgeNum < 1:
     edgeNum = 1
 

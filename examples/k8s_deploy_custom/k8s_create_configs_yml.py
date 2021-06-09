@@ -68,7 +68,7 @@ for i in range(1, edgeNum+1):
 f = open('configs.yml', 'w')
 f.write(text)
 f.close()
-
+print('create configs.yml success!')
 
 
 

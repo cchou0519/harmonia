@@ -1,13 +1,15 @@
-# ====== zone of config =====
-ff = open('number of edges', 'r')
-temp = ff.readline()
-ff.close()
-edgeNum = int(temp)
-# ====== zone of config =====
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--edgeNum", help="number of edge", type=int, dest="edgeNum")
+parser.add_argument("-imr", "--imageRegistry", help="your image registry", type=str, dest="imr")
+
+cmd_args = parser.parse_args()
+
+edgeNum = cmd_args.edgeNum
 if edgeNum < 1:
     edgeNum = 1
-
+imr = cmd_args.imageRegistry
 # Aggregator
 text = '# Aggregator\n' \
        'apiVersion: apps/v1\n' \
@@ -28,7 +30,7 @@ text = '# Aggregator\n' \
        '    spec:\n' \
        '      containers:\n' \
        '      - name: operator\n' \
-       '        image: cchou0519/harmonia-operator\n' \
+       '        image: ' + imr + '/harmonia-operator\n' \
        '        imagePullPolicy: Always \n' \
        '        ports:\n' \
        '        - containerPort: 9080\n' \
@@ -40,7 +42,7 @@ text = '# Aggregator\n' \
        '        - name: shared-repos\n' \
        '          mountPath: /repos\n' \
        '      - name: application\n' \
-       '        image: cchou0519/harmonia-fedavg\n' \
+       '        image: ' + imr + '/harmonia-fedavg\n' \
        '        imagePullPolicy: Always \n' \
        '        volumeMounts:\n' \
        '        - name: shared-repos\n' \
@@ -95,7 +97,7 @@ for i in range(1, edgeNum+1):
             '    spec:\n' \
             '      containers:\n' \
             '      - name: operator\n' \
-            '        image: cchou0519/harmonia-operator\n' \
+            '        image: ' + imr + '/harmonia-operator\n' \
             '        imagePullPolicy: Always \n' \
             '        ports:\n' \
             '        - containerPort: 9080\n' \
@@ -107,7 +109,7 @@ for i in range(1, edgeNum+1):
             '        - name: shared-repos\n' \
             '          mountPath: /repos\n' \
             '      - name: application\n' \
-            '        image: cchou0519/mnist_edge\n' \
+            '        image: ' + imr + '/mnist_edge\n' \
             '        imagePullPolicy: Always \n' \
             '        volumeMounts:\n' \
             '        - name: shared-repos\n' \
@@ -161,7 +163,7 @@ text += '# Logserver\n' \
         '    spec:\n' \
         '      containers:\n' \
         '      - name: operator\n' \
-        '        image: cchou0519/harmonia-logserver\n' \
+        '        image: ' + imr + '/harmonia-logserver\n' \
         '        imagePullPolicy: Always \n' \
         '        ports:\n' \
         '        - containerPort: 9080\n' \

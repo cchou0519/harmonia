@@ -212,3 +212,4 @@ text += '# Logserver\n' \
 f = open('mnist-deployment.yml', 'w')
 f.write(text)
 f.close()
+print('create mnist-deployment.yml success!')

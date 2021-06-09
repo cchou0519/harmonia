@@ -1,5 +1,6 @@
 import argparse
 
+parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--edgeNum", help="number of edge", type=int, dest="edgeNum")
 
 edgeNum = parser.edgeNum

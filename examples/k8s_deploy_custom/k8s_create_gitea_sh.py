@@ -104,3 +104,5 @@ for i in range(1, edgeNum+1):
 f = open('gitea_setup.sh', 'w')
 f.write(text)
 f.close()
+print('create gitea_setup.sh success!')
+

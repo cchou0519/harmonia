@@ -9,7 +9,7 @@ cmd_args = parser.parse_args()
 edgeNum = cmd_args.edgeNum
 if edgeNum < 1:
     edgeNum = 1
-imr = cmd_args.imageRegistry
+imr = cmd_args.imr
 # Aggregator
 text = '# Aggregator\n' \
        'apiVersion: apps/v1\n' \
